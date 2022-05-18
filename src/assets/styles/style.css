@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    box-sizing: border-box;
+    --header-height: 68px;
+    --footer-height: 118px;
+    --color1: #E8833A;
+}
+
+a {
+    text-decoration: none;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100vw;
+    height: var(--header-height);
+    background-color: #C3CFD9;
+
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 34px;
+    color: var(--color1);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: calc(100vh - var(--footer-height) - var(--header-height));
+
+}
+
+main.movie-selection {
+    height: calc(100vh - var(--header-height));
+}
+
+main h2 {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: 0.04em;
+    text-align: center;
+    color: #293845;
+
+    margin: 40px 0;
+}
+
+footer {
+    width: 100vw;
+    height: var(--footer-height);
+    border: 1px solid #9EADBA;
+    background-color: #DFE6ED;
+}
+
+.movies-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 316px;
+    overflow-y: scroll;
+}
+
+.movie {
+    width: 146px;
+    height: 210px;
+    padding: 8px;
+    box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    overflow: hidden;
+}
+.movie img {
+    width: 130px;
+    height: 194px;
+}
+
+.section-list {
+    width: 100vw;
+    padding: 0 25px;
+    overflow-y: scroll;
+}
+
+.day {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    letter-spacing: 0.02em;
+    color: #293845;
+}
+
+.hours-container {
+    display: flex;
+    margin: 22px 0;
+    gap: 10px;
+}
+
+.hours-container div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 84px;
+    height: 44px;
+    border-radius: 3px;
+    background-color: #E8833A;
+
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+}
