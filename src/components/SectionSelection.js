@@ -15,7 +15,7 @@ export default function SectionSelection () {
         })
     }, [])
 
-    function Day ( { id, weekday, date, showtimes } ) {
+    function Day ( { id, weekday, date, showtimes} ) {
         return (
             <div className='day'>
                 <h3>{weekday} - {date}</h3>
@@ -33,7 +33,7 @@ export default function SectionSelection () {
         <>
             <main className="main section-selection">
                 <h2>Selecione o horário</h2>
-                <div className='section-list'>
+                <div className='main-content'>
                     {informations.days ? informations.days.map( (day, index) =>
                         <Day
                             id={day.id}
