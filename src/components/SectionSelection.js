@@ -48,6 +48,7 @@ export default function SectionSelection () {
                 <div>
                     <img src={informations.posterURL} alt=''></img>
                 </div>
+                <h3>{informations.title}</h3>
             </footer>
         </>
         
