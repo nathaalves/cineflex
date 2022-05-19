@@ -20,8 +20,8 @@ export default function SectionSelection () {
             <div className='day'>
                 <h3>{weekday} - {date}</h3>
                 <div className='hours-container'>
-                    {showtimes.map(showtime =>
-                    <Link to={`assentos/${showtime.id}`}>
+                    {showtimes.map((showtime, index) =>
+                    <Link to={`assentos/${showtime.id}`} key={index}>
                         <div>{showtime.name}</div>
                     </Link> )}
                 </div>

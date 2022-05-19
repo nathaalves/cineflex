@@ -67,7 +67,7 @@ footer {
     color: #293845;
 }
 
-footer div {
+.poster {
     width: 64px;
     height: 90px;
     padding: 8px;
@@ -141,4 +141,113 @@ footer img {
     line-height: 21px;
     letter-spacing: 0.02em;
     color: #FFFFFF;
+}
+
+.seats {
+    display: flex;
+    flex-wrap: wrap;
+    width: 323px;
+    height: 200px;
+    gap: 7px;
+}
+
+.seat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background-color: #C3CFD9;
+    border: 1px solid #808F9D;
+    border-radius: 50%;
+
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    letter-spacing: 0.04em;
+    color: #000000;
+}
+.seats .seat {
+    cursor: pointer;
+}
+
+.status {
+    display: flex;
+    justify-content: space-between;
+    width: 280px;
+    margin-top: 15px;
+
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+    letter-spacing: -0.013em;
+    color: #4E5A65;
+}
+
+.status > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selected {
+    background: #8DD7CF;
+    border: 1px solid #1AAE9E;
+}
+
+.unavailable {
+    background: #FBE192;
+    border: 1px solid #F7C52B;
+}
+
+.seats .seat.unavailable {
+    cursor: default;
+}
+
+.input-container {
+    margin-top: 40px;
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    color: #293845;
+}
+
+.input-container input{
+    width: 328px;
+    height: 50px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+.input-container input::placeholder{
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    color: #AFAFAF;
+}
+
+.btn-reserve {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 226px;
+    height: 42px;
+    border-radius: 3px;
+    background-color: #E8833A;
+    margin-top: 50px;
+
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    letter-spacing: 0.04em;
+    color: #FFFFFF;
+
+    cursor: pointer;
 }
