@@ -1,36 +1,47 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
 
 let cpf = ""
-export default function SeatSelection () {
+export default function SeatSelection ( { 
+    information,
+    setInformation, 
+    seatsName, 
+    setSeatsName, 
+    cpf, 
+    setCpf, 
+    name, 
+    setName }) {
 
     const { sectionId } = useParams();
-    const [seatsInf, setSeatsInf] = useState({});
-    const [selectedSeats, setSelectedSeats] = useState([]);
-    const [cpf, setCpf] = useState("")
-    const [name, setName] = useState("")
+    //const [information, setInformation] = useState({});
+    const [selectedSeatsID, setSelectedSeatsID] = useState([]);
+    //const [cpf, setCpf] = useState("")
+    //const [name, setName] = useState("")
 
     useEffect( () => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sectionId}/seats`);
         promisse.then(response => {
-            setSeatsInf({...response.data});
+            setInformation({...response.data});
         })
     }, [])
 
-    function selectSeat (id) {
-        if (selectedSeats.includes(id)) {
-            selectedSeats.splice(selectedSeats.indexOf(id), 1)
+    function selectSeat (id, name) {
+        if (selectedSeatsID.includes(id)) {
+            selectedSeatsID.splice(selectedSeatsID.indexOf(id), 1)
+            seatsName.splice(seatsName.indexOf(name), 1)
         } else {
-            selectedSeats.push(id)
+            selectedSeatsID.push(id)
+            seatsName.push(name)
         }
-        setSelectedSeats([...selectedSeats])
+        setSelectedSeatsID([...selectedSeatsID])
+        setSeatsName([...seatsName])
     }
 
     function defineClass (status, id) {
 
         if (status) {
-            if (selectedSeats.includes(id)) {
+            if (selectedSeatsID.includes(id)) {
                 return 'seat selected'
             } else {
                 return 'seat'
@@ -41,7 +52,7 @@ export default function SeatSelection () {
 
     function reserveSeats () {
         axios.post('https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many', {
-            ids: selectedSeats,
+            ids: selectedSeatsID,
             name: name,
             cpf: cpf
         })
@@ -52,7 +63,7 @@ export default function SeatSelection () {
             <main className="main">
                 <h2>Selecione o(s) assento(s)</h2>
                 <div className='seats'>
-                    { seatsInf.id ? seatsInf.seats.map( (seat, index) => <div className={ defineClass(seat.isAvailable, seat.id) } onClick={ seat.isAvailable ? () => selectSeat (seat.id) : null } key={index} >{ (index < 9) ? '0' + (index + 1) : index +1 }</div>) : null }
+                    { information.id ? information.seats.map( (seat, index) => <div className={ defineClass(seat.isAvailable, seat.id) } onClick={ seat.isAvailable ? () => selectSeat (seat.id, seat.name) : null } key={index} >{ (index < 9) ? '0' + (index + 1) : index +1 }</div>) : null }
                 </div>
                 <div className='status'>
                     <div>
@@ -74,15 +85,17 @@ export default function SeatSelection () {
                     <h3>CPF do comprador:</h3>
                     <input placeholder='Digite seu CPF...' onChange={ (e) => setCpf(e.target.value)}></input>
                 </div>
-                <div className='btn-reserve' onClick={ reserveSeats }>Reservar assento(s)</div>
+                <Link to={"/sucesso"}>
+                    <div className='btn-reserve' onClick={ reserveSeats }>Reservar assento(s)</div>
+                </Link>
             </main>
             <footer className="footer">
                 <div className='poster'>
-                    {seatsInf.id ? <img src={seatsInf.movie.posterURL} alt=''></img> : null} 
+                    {information.id ? <img src={information.movie.posterURL} alt=''></img> : null} 
                 </div>
                 <div>
-                    {seatsInf.id ? <h3>{seatsInf.movie.title}</h3> : null}
-                    {seatsInf.id ? <h3>{seatsInf.day.weekday} - {seatsInf.name}</h3>: null}
+                    {information.id ? <h3>{information.movie.title}</h3> : null}
+                    {information.id ? <h3>{information.day.weekday} - {information.name}</h3>: null}
                 </div>              
             </footer>
         </>
