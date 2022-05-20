@@ -1,33 +1,40 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Button from "./Button";
 
-export default function Success ( { information, seatsName, cpf, name} ) {
+export default function Success ( { information, setSelectedSeatsID, seatsName, setSeatsName, cpf, name} ) {
+
+    function reset () {
+        setSelectedSeatsID([]);
+        setSeatsName([]);
+    }
+
     return (
-        <main >
+        < >
             <Title>
                 <Text color='#247A6B'>Pedido feito</Text>
                 <Text color='#247A6B'>com sucesso!</Text>
             </Title>
             <BookingContainer>
-                <Information>
+                <div>
                     <Text>Filme e sessão</Text>
                     <SubText>{information.movie.title}</SubText>
                     <SubText>{information.day.date} {information.name}</SubText>
-                </Information>
-                <Information>
+                </div>
+                <div>
                     <Text>Ingressos</Text>
-                    {seatsName.sort( (a, b) => a - b ).map(name => <SubText>Assento {name}</SubText>)}
-                </Information>
-                <Information>
+                    {seatsName.sort( (a, b) => a - b ).map( (name, index) => <SubText key={index}>Assento {name}</SubText>)}
+                </div>
+                <div>
                     <Text>Comprador</Text>
                     <SubText>Nome: {name}</SubText>
                     <SubText>CPF: {cpf}</SubText>
-                </Information>
+                </div>
             </BookingContainer>
             <Link to="/">
-                <Button>Voltar para Home</Button>
+                <Button onClick={ reset } >Voltar para Home</Button>
             </Link>
-        </main>
+        </>
     )
 }
 
@@ -59,29 +66,8 @@ const SubText = styled.h3`
 const BookingContainer = styled.div`
     width: 100vw;
     padding: 0 30px;
-`
 
-const Information = styled.div`
-    margin-bottom: 30px;
-`
-
-const Button = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 226px;
-    height: 42px;
-    border-radius: 3px;
-    background-color: #E8833A;
-    margin-top: 50px;
-
-    font-family: 'Roboto';
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 21px;
-    letter-spacing: 0.04em;
-    color: #FFFFFF;
-
-    cursor: pointer;
+    & > div {
+        margin-bottom: 30px;
+    }
 `

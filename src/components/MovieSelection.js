@@ -1,16 +1,17 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
 
 export default function MovieSelection () {
 
-    const [movies, setMovies] = useState([])
+    const history = useNavigate()
+    console.log(history)
+
+    const [movies, setMovies] = useState([]);
 
     useEffect( () => {
-        const promisse = axios.get('https://mock-api.driven.com.br/api/v5/cineflex/movies')
-        promisse.then(response => {
-            setMovies([...response.data])
-        })
+        const promisse = axios.get('https://mock-api.driven.com.br/api/v5/cineflex/movies');
+        promisse.then(response => setMovies( [...response.data] ));
     }, [])
 
     function Movie ({ source, id }) {

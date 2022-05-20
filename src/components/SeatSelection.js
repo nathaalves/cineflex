@@ -1,11 +1,15 @@
 import { Link, useParams } from 'react-router-dom';
-import React, { useState, useEffect} from "react";
+import styled from 'styled-components';
 import axios from 'axios';
+import React, { useEffect} from "react";
+import Footer from './Footer';
+import Button from './Button';
 
-let cpf = ""
 export default function SeatSelection ( { 
     information,
     setInformation, 
+    selectedSeatsID,
+    setSelectedSeatsID,
     seatsName, 
     setSeatsName, 
     cpf, 
@@ -14,40 +18,39 @@ export default function SeatSelection ( {
     setName }) {
 
     const { sectionId } = useParams();
-    //const [information, setInformation] = useState({});
-    const [selectedSeatsID, setSelectedSeatsID] = useState([]);
-    //const [cpf, setCpf] = useState("")
-    //const [name, setName] = useState("")
 
     useEffect( () => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sectionId}/seats`);
-        promisse.then(response => {
-            setInformation({...response.data});
-        })
+        promisse.then( response => setInformation( {...response.data} ) );
     }, [])
 
-    function selectSeat (id, name) {
-        if (selectedSeatsID.includes(id)) {
-            selectedSeatsID.splice(selectedSeatsID.indexOf(id), 1)
-            seatsName.splice(seatsName.indexOf(name), 1)
+    function selectSeat (id, name, isAvailable) {
+
+        if (isAvailable) {
+            if (selectedSeatsID.includes(id)) {
+                selectedSeatsID.splice(selectedSeatsID.indexOf(id), 1);
+                seatsName.splice(seatsName.indexOf(name), 1);
+            } else {
+                selectedSeatsID.push(id);
+                seatsName.push(name);
+            }
+            setSelectedSeatsID([...selectedSeatsID]);
+            setSeatsName([...seatsName]);
         } else {
-            selectedSeatsID.push(id)
-            seatsName.push(name)
+            alert("Esse assento não está disponível!");
         }
-        setSelectedSeatsID([...selectedSeatsID])
-        setSeatsName([...seatsName])
     }
 
     function defineClass (status, id) {
 
         if (status) {
             if (selectedSeatsID.includes(id)) {
-                return 'seat selected'
+                return 'seat selected';
             } else {
-                return 'seat'
+                return 'seat';
             }
         }
-        return 'seat unavailable'
+        return 'seat unavailable';
     }
 
     function reserveSeats () {
@@ -58,14 +61,35 @@ export default function SeatSelection ( {
         })
     }
 
+    function Input () {
+        return (
+            <InputBox>
+                <h3>Nome do comprador:</h3>
+                <input placeholder='Digite seu nome...' onChange={ (e) => setName(e.target.value) } ></input>
+                <h3>CPF do comprador:</h3>
+                <input placeholder='Digite seu CPF...' onChange={ (e) => setCpf(e.target.value) } ></input>
+            </InputBox>
+        )
+    }
+
     return (
         <>
-            <main className="main">
+            <Container>
                 <h2>Selecione o(s) assento(s)</h2>
-                <div className='seats'>
-                    { information.id ? information.seats.map( (seat, index) => <div className={ defineClass(seat.isAvailable, seat.id) } onClick={ seat.isAvailable ? () => selectSeat (seat.id, seat.name) : null } key={index} >{ (index < 9) ? '0' + (index + 1) : index +1 }</div>) : null }
-                </div>
-                <div className='status'>
+                <SeatsContainer>
+                    { information.seats ? 
+                        information.seats.map( (seat, index) => 
+                            <div 
+                                className={ defineClass(seat.isAvailable, seat.id) } 
+                                onClick={ () => selectSeat (seat.id, seat.name, seat.isAvailable) } 
+                                key={index} 
+                            >
+                                { (index < 9) ? '0' + (index + 1) : index + 1 }
+                            </div>
+                        )
+                    : null }
+                </SeatsContainer>
+                <Subtitle>
                     <div>
                         <div className='seat selected'></div>
                         <span>Selecionado</span>
@@ -78,26 +102,140 @@ export default function SeatSelection ( {
                         <div className='seat unavailable'></div>
                         <span>Indisponível</span>
                     </div>
-                </div>
-                <div className='input-container'>
-                    <h3>Nome do comprador:</h3>
-                    <input placeholder='Digite seu nome...' onChange={ (e) => setName(e.target.value)}></input>
-                    <h3>CPF do comprador:</h3>
-                    <input placeholder='Digite seu CPF...' onChange={ (e) => setCpf(e.target.value)}></input>
-                </div>
-                <Link to={"/sucesso"}>
-                    <div className='btn-reserve' onClick={ reserveSeats }>Reservar assento(s)</div>
+                </Subtitle>
+                {selectedSeatsID.map( (set, index) =>  <Input key={index} />)}
+                <Link to={ "/sucesso" } >
+                    <Button onClick={ reserveSeats }>Reservar assento(s)</Button>
                 </Link>
-            </main>
-            <footer className="footer">
-                <div className='poster'>
-                    {information.id ? <img src={information.movie.posterURL} alt=''></img> : null} 
-                </div>
-                <div>
-                    {information.id ? <h3>{information.movie.title}</h3> : null}
-                    {information.id ? <h3>{information.day.weekday} - {information.name}</h3>: null}
-                </div>              
-            </footer>
+            </Container>
+            { information.movie ? 
+                <Footer 
+                    posterURL={information.movie.posterURL} 
+                    title={information.movie.title} 
+                    weekday={information.day.weekday} 
+                    name={information.name} 
+                /> 
+            : null}
         </>
     )
 }
+
+const Container = styled.main`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: calc(100vh - 186px);
+
+    & > h2 {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 28px;
+        letter-spacing: 0.04em;
+        text-align: center;
+        color: #293845;
+
+        margin: 40px 0;
+    }
+
+    .seat {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 26px;
+        height: 26px;
+        background-color: #C3CFD9;
+        border: 1px solid #808F9D;
+        border-radius: 50%;
+
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 13px;
+        letter-spacing: 0.04em;
+        color: #000000;
+        cursor: pointer;
+    }
+
+    .selected {
+        background-color: #8DD7CF;
+        border: 1px solid #1AAE9E;
+    }
+
+    .unavailable {
+        background-color: #FBE192;
+        border: 1px solid #F7C52B;
+        cursor: default;
+    }
+`
+
+const SeatsContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    width: 323px;
+    height: 200px;
+    gap: 7px;
+`
+
+const Subtitle = styled.div`
+    display: flex;
+    justify-content: space-between;
+
+    width: 280px;
+    margin-top: 15px;
+
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+    letter-spacing: -0.013em;
+    color: #4E5A65;
+
+    & > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    span {
+        margin-top: 5px;
+    }
+
+    .seat {
+        cursor: default;
+    }
+`
+
+const InputBox = styled.div`
+
+    margin-top: 40px;
+
+    h3 {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        color: #293845;
+        margin-bottom: 3px;
+    }
+
+    input{
+        width: 328px;
+        height: 50px;
+        padding-left: 10px;
+        margin-bottom: 10px;
+
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        color: #293845;
+    }
+
+    input::placeholder{
+        font-style: italic;
+        color: #AFAFAF;
+    }
+`

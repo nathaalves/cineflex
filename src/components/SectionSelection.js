@@ -1,21 +1,23 @@
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
+import Footer from './Footer';
+
 
 export default function SectionSelection () {
 
+    const history = useNavigate()
+    console.log(history)
+
     const { movieId } = useParams();
-    const [informations, setInformations] = useState({})
+    const [informations, setInformations] = useState({});
 
     useEffect( () => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${movieId}/showtimes`);
-        promisse.then(response => {
-            setInformations({...response.data})
-        })
+        promisse.then(response => setInformations( {...response.data} ));
     }, [])
 
-    function Day ( { id, weekday, date, showtimes} ) {
+    function Day ( { weekday, date, showtimes} ) {
         return (
             <div className='day'>
                 <h3>{weekday} - {date}</h3>
@@ -36,20 +38,14 @@ export default function SectionSelection () {
                 <div className='main-content'>
                     {informations.days ? informations.days.map( (day, index) =>
                         <Day
-                            id={day.id}
                             weekday={day.weekday}
                             date={day.date}
                             showtimes={day.showtimes}
                             key={index}
-                        />) : <></>}
+                        />) : null}
                 </div>
             </main>
-            <footer className="footer">
-                <div>
-                    <img src={informations.posterURL} alt=''></img>
-                </div>
-                <h3>{informations.title}</h3>
-            </footer>
+            {informations.posterURL ? <Footer posterURL={informations.posterURL} title={informations.title}/> : null}
         </>
         
     )

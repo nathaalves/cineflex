@@ -4,15 +4,16 @@ import Header from "./Header";
 import MovieSelection from "./MovieSelection";
 import SectionSelection from "./SectionSelection";
 import SeatSelection from "./SeatSelection";
-import Success from "./Success"
+import Success from "./Success";
 
 
 export default function App () {
 
     const [information, setInformation] = useState({});
+    const [selectedSeatsID, setSelectedSeatsID] = useState([]);
     const [seatsName, setSeatsName] = useState([]);
-    const [cpf, setCpf] = useState("")
-    const [name, setName] = useState("")
+    const [cpf, setCpf] = useState("");
+    const [name, setName] = useState("");
 
     return (
         <>
@@ -21,26 +22,36 @@ export default function App () {
                 <Routes>
                     <Route path="/" element={<MovieSelection />} />
                     <Route path="/sessoes/:movieId" element={<SectionSelection />} />
-                    <Route path="/sessoes/:movieId/assentos/:sectionId" 
-                        element={ <SeatSelection
-                            information={information}
-                            setInformation={setInformation}
-                            seatsName={seatsName}
-                            setSeatsName={setSeatsName}
-                            cpf={cpf}
-                            setCpf={setCpf}
-                            name={name}
-                            setName={setName}
-                        />}
-                     />
-                    <Route path="/sucesso" 
-                        element={ <Success
-                            information={information}
-                            seatsName={seatsName}
-                            cpf={cpf}
-                            name={name}
-                         />}
-                     />
+                    <Route 
+                        path="/sessoes/:movieId/assentos/:sectionId" 
+                        element={ 
+                            <SeatSelection
+                                information={information}
+                                setInformation={setInformation}
+                                selectedSeatsID={selectedSeatsID}
+                                setSelectedSeatsID={setSelectedSeatsID}
+                                seatsName={seatsName}
+                                setSeatsName={setSeatsName}
+                                cpf={cpf}
+                                setCpf={setCpf}
+                                name={name}
+                                setName={setName}
+                            />
+                        }
+                    />
+                    <Route 
+                        path="/sucesso" 
+                        element={ 
+                            <Success
+                                information={information}
+                                setSelectedSeatsID={setSelectedSeatsID}
+                                seatsName={seatsName}
+                                setSeatsName={setSeatsName}
+                                cpf={cpf}
+                                name={name}
+                            />
+                        }
+                    />
                 </Routes>
             </BrowserRouter>
         </>
