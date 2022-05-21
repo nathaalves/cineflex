@@ -12,8 +12,7 @@ export default function App () {
     const [information, setInformation] = useState({});
     const [selectedSeatsID, setSelectedSeatsID] = useState([]);
     const [seatsName, setSeatsName] = useState([]);
-    const [cpf, setCpf] = useState("");
-    const [name, setName] = useState("");
+    const [buyers, setBuyers] = useState([]);
 
     return (
         <>
@@ -32,10 +31,8 @@ export default function App () {
                                 setSelectedSeatsID={setSelectedSeatsID}
                                 seatsName={seatsName}
                                 setSeatsName={setSeatsName}
-                                cpf={cpf}
-                                setCpf={setCpf}
-                                name={name}
-                                setName={setName}
+                                buyers={buyers}
+                                setBuyers={setBuyers}
                             />
                         }
                     />
@@ -47,8 +44,7 @@ export default function App () {
                                 setSelectedSeatsID={setSelectedSeatsID}
                                 seatsName={seatsName}
                                 setSeatsName={setSeatsName}
-                                cpf={cpf}
-                                name={name}
+                                buyers={buyers}
                             />
                         }
                     />

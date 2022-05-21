@@ -12,30 +12,55 @@ export default function SeatSelection ( {
     setSelectedSeatsID,
     seatsName, 
     setSeatsName, 
-    cpf, 
-    setCpf, 
-    name, 
-    setName }) {
+    buyers,
+    setBuyers,
+    }) {
 
     const { sectionId } = useParams();
 
     useEffect( () => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sectionId}/seats`);
-        promisse.then( response => setInformation( {...response.data} ) );
+        promisse.then( response => setInformation( {...response.data} ));
     }, [])
-
-    function selectSeat (id, name, isAvailable) {
+    
+    function selectSeat (seatId, seatName, isAvailable) {
 
         if (isAvailable) {
-            if (selectedSeatsID.includes(id)) {
-                selectedSeatsID.splice(selectedSeatsID.indexOf(id), 1);
-                seatsName.splice(seatsName.indexOf(name), 1);
+            
+            if (selectedSeatsID.includes(seatId)) {
+
+                const index = buyers.findIndex( obj => obj.idAssento === seatId);
+
+                let isOK = true
+                if (buyers[index].nome !== "" || buyers[index].cpf !== "") {
+                    isOK = window.confirm("Você gostaria realmente de remover o assento e apagar os dados?")
+                }
+
+                if (isOK) {
+                    selectedSeatsID.splice(selectedSeatsID.indexOf(seatId), 1);
+                    seatsName.splice(seatsName.indexOf(seatName), 1);
+    
+                    
+                    buyers.splice(index, 1);
+                }
             } else {
-                selectedSeatsID.push(id);
-                seatsName.push(name);
+
+                selectedSeatsID.push(seatId);
+                seatsName.push(seatName);
+                buyers.push({
+                    idAssento: seatId,
+                    nome: "",
+                    cpf: ""
+                })
             }
+            
+            selectedSeatsID.sort( (a, b) => a - b )
+            seatsName.sort( (a, b) => a - b )
+            buyers.sort( (a, b) => a.idAssento - b.idAssento )
+
             setSelectedSeatsID([...selectedSeatsID]);
             setSeatsName([...seatsName]);
+            setBuyers([...buyers])
         } else {
             alert("Esse assento não está disponível!");
         }
@@ -56,18 +81,29 @@ export default function SeatSelection ( {
     function reserveSeats () {
         axios.post('https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many', {
             ids: selectedSeatsID,
-            name: name,
-            cpf: cpf
+            compradores: buyers
         })
     }
 
-    function Input () {
+    function inputText (e, seatId, type) {
+        let text = e.target.value
+
+        if (type === "name") {
+            buyers[buyers.findIndex( obj => obj.idAssento === seatId)].nome = text
+        }
+        if (type === "cpf") {
+            buyers[buyers.findIndex( obj => obj.idAssento === seatId)].cpf = text
+        }
+        setBuyers([...buyers])
+    }
+
+    function Input ( {seatId} ) {
         return (
             <InputBox>
                 <h3>Nome do comprador:</h3>
-                <input placeholder='Digite seu nome...' onChange={ (e) => setName(e.target.value) } ></input>
+                <input placeholder='Digite seu nome...' onChange={ (e) => inputText(e, seatId, "name") } value={buyers[buyers.findIndex( obj => obj.idAssento === seatId)].nome}></input>
                 <h3>CPF do comprador:</h3>
-                <input placeholder='Digite seu CPF...' onChange={ (e) => setCpf(e.target.value) } ></input>
+                <input placeholder='Digite seu CPF...' onChange={ (e) => inputText(e, seatId, "cpf") } value={buyers[buyers.findIndex( obj => obj.idAssento === seatId)].cpf}></input>
             </InputBox>
         )
     }
@@ -103,7 +139,9 @@ export default function SeatSelection ( {
                         <span>Indisponível</span>
                     </div>
                 </Subtitle>
-                {selectedSeatsID.map( (set, index) =>  <Input key={index} />)}
+                <BookingInformations>
+                    {selectedSeatsID.map( (seatId, index) =>  <Input key={index} seatId={seatId}/>)}
+                </BookingInformations>
                 <Link to={ "/sucesso" } >
                     <Button onClick={ reserveSeats }>Reservar assento(s)</Button>
                 </Link>
@@ -238,4 +276,7 @@ const InputBox = styled.div`
         font-style: italic;
         color: #AFAFAF;
     }
+`
+const BookingInformations = styled.div`
+    /* overflow-y: hidden; */
 `

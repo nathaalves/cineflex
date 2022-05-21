@@ -1,13 +1,10 @@
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
 import Footer from './Footer';
 
 
 export default function SectionSelection () {
-
-    const history = useNavigate()
-    console.log(history)
 
     const { movieId } = useParams();
     const [informations, setInformations] = useState({});

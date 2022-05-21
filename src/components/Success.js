@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from "./Button";
 
-export default function Success ( { information, setSelectedSeatsID, seatsName, setSeatsName, cpf, name} ) {
+export default function Success ( { information, setSelectedSeatsID, seatsName, setSeatsName, buyers} ) {
 
     function reset () {
         setSelectedSeatsID([]);
@@ -23,12 +23,13 @@ export default function Success ( { information, setSelectedSeatsID, seatsName, 
                 </div>
                 <div>
                     <Text>Ingressos</Text>
-                    {seatsName.sort( (a, b) => a - b ).map( (name, index) => <SubText key={index}>Assento {name}</SubText>)}
-                </div>
-                <div>
-                    <Text>Comprador</Text>
-                    <SubText>Nome: {name}</SubText>
-                    <SubText>CPF: {cpf}</SubText>
+                    {buyers.map( (buyer, index) => 
+                        <Buyer key={index}>
+                            <SubText>Assento {seatsName[index]}</SubText>
+                            <SubText>Nome: {buyer.nome}</SubText>
+                            <SubText>CPF: {buyer.cpf}</SubText>
+                        </Buyer>
+                    )}
                 </div>
             </BookingContainer>
             <Link to="/">
@@ -70,4 +71,8 @@ const BookingContainer = styled.div`
     & > div {
         margin-bottom: 30px;
     }
+`
+
+const Buyer = styled.div`
+    margin-top: 20px;
 `

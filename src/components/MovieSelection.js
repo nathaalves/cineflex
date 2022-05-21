@@ -1,11 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
 
 export default function MovieSelection () {
-
-    const history = useNavigate()
-    console.log(history)
 
     const [movies, setMovies] = useState([]);
 
