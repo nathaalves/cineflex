@@ -33,14 +33,12 @@ export default function SeatSelection ( {
 
                 let isOK = true
                 if (buyers[index].nome !== "" || buyers[index].cpf !== "") {
-                    isOK = window.confirm("Você gostaria realmente de remover o assento e apagar os dados?")
+                    isOK = window.confirm("Você gostaria realmente de remover o assento e apagar os dados?");
                 }
 
                 if (isOK) {
                     selectedSeatsID.splice(selectedSeatsID.indexOf(seatId), 1);
                     seatsName.splice(seatsName.indexOf(seatName), 1);
-    
-                    
                     buyers.splice(index, 1);
                 }
             } else {
@@ -86,6 +84,7 @@ export default function SeatSelection ( {
     }
 
     function inputText (e, seatId, type) {
+        e.stopPropagation();
         let text = e.target.value
 
         if (type === "name") {
@@ -101,9 +100,9 @@ export default function SeatSelection ( {
         return (
             <InputBox>
                 <h3>Nome do comprador:</h3>
-                <input placeholder='Digite seu nome...' onChange={ (e) => inputText(e, seatId, "name") } value={buyers[buyers.findIndex( obj => obj.idAssento === seatId)].nome}></input>
+                <input placeholder='Digite seu nome...' onChange={ (e) => inputText(e, seatId, "name") } value={buyers[buyers.findIndex( buyer => buyer.idAssento === seatId)].nome}></input>
                 <h3>CPF do comprador:</h3>
-                <input placeholder='Digite seu CPF...' onChange={ (e) => inputText(e, seatId, "cpf") } value={buyers[buyers.findIndex( obj => obj.idAssento === seatId)].cpf}></input>
+                <input placeholder='Digite seu CPF...' onChange={ (e) => inputText(e, seatId, "cpf") } value={buyers[buyers.findIndex( buyer => buyer.idAssento === seatId)].cpf}></input>
             </InputBox>
         )
     }
@@ -164,6 +163,7 @@ const Container = styled.main`
     align-items: center;
     width: 100vw;
     height: calc(100vh - 186px);
+    overflow-y: scroll;
 
     & > h2 {
         font-family: 'Roboto';

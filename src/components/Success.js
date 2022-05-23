@@ -9,6 +9,23 @@ export default function Success ( { information, setSelectedSeatsID, seatsName, 
         setSeatsName([]);
     }
 
+    function formatCpf ( cpf) {
+        let formatedCpf = "";
+        let index = 0;
+        for (let i = 0; i < 14; i++) {
+
+            if (i === 3 || i === 7) {
+                formatedCpf += ".";
+            } else if (i === 11) {
+                formatedCpf += "-";
+            } else {
+                formatedCpf += cpf[index];
+                index++
+            }
+        }
+        return formatedCpf;
+    }
+
     return (
         < >
             <Title>
@@ -27,7 +44,7 @@ export default function Success ( { information, setSelectedSeatsID, seatsName, 
                         <Buyer key={index}>
                             <SubText>Assento {seatsName[index]}</SubText>
                             <SubText>Nome: {buyer.nome}</SubText>
-                            <SubText>CPF: {buyer.cpf}</SubText>
+                            <SubText>CPF: {formatCpf(buyer.cpf)}</SubText>
                         </Buyer>
                     )}
                 </div>
