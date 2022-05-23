@@ -29,9 +29,9 @@ export default function SeatSelection ( {
             
             if (selectedSeatsID.includes(seatId)) {
 
-                const index = buyers.findIndex( obj => obj.idAssento === seatId);
-
                 let isOK = true
+                const index = buyers.findIndex( buyer => buyer.idAssento === seatId);
+
                 if (buyers[index].nome !== "" || buyers[index].cpf !== "") {
                     isOK = window.confirm("Você gostaria realmente de remover o assento e apagar os dados?");
                 }
@@ -84,32 +84,37 @@ export default function SeatSelection ( {
     }
 
     function inputText (e, seatId, type) {
-        e.stopPropagation();
+
         let text = e.target.value
+        const index = buyers.findIndex( buyer => buyer.idAssento === seatId);
 
         if (type === "name") {
-            buyers[buyers.findIndex( obj => obj.idAssento === seatId)].nome = text
+            buyers[index].nome = text
         }
         if (type === "cpf") {
-            buyers[buyers.findIndex( obj => obj.idAssento === seatId)].cpf = text
+            buyers[index].cpf = text
         }
         setBuyers([...buyers])
     }
 
     function Input ( {seatId} ) {
+
+        const index = buyers.findIndex( buyer => buyer.idAssento === seatId);
+
         return (
             <InputBox>
+                <h3>Assento {seatsName[index]}</h3>
                 <h3>Nome do comprador:</h3>
                 <input 
                     placeholder='Digite seu nome...' 
                     onChange={ (e) => inputText(e, seatId, "name") } 
-                    value={buyers[buyers.findIndex( buyer => buyer.idAssento === seatId)].nome}
+                    value={buyers[index].nome}
                 ></input>
                 <h3>CPF do comprador:</h3>
                 <input 
                     placeholder='Digite seu CPF...' 
                     onChange={ (e) => inputText(e, seatId, "cpf") } 
-                    value={buyers[buyers.findIndex( buyer => buyer.idAssento === seatId)].cpf}
+                    value={buyers[index].cpf}
                 ></input>
             </InputBox>
         )
@@ -265,6 +270,10 @@ const InputBox = styled.div`
         line-height: 21px;
         color: #293845;
         margin-bottom: 3px;
+    }
+
+    h3:first-child {
+        font-weight: bold;
     }
 
     input{
