@@ -16,6 +16,7 @@ export default function SeatSelection ( {
     setBuyers,
     }) {
 
+    console.log(buyers)
     const { sectionId } = useParams();
 
     useEffect( () => {
@@ -89,10 +90,18 @@ export default function SeatSelection ( {
         const index = buyers.findIndex( buyer => buyer.idAssento === seatId);
 
         if (type === "name") {
-            buyers[index].nome = text
+            if (isNaN(Number(text[text.length-1]))) {
+                buyers[index].nome = text
+            } else {
+                alert("Não é possível a entrada de números!")
+            }
         }
         if (type === "cpf") {
-            buyers[index].cpf = text
+            if (isNaN(Number(text)) || text.length > 11) {
+                alert("Informe apenas os 11 dígitos numéricos do seu CPF!")
+            } else {
+                buyers[index].cpf = text
+            }
         }
         setBuyers([...buyers])
     }
@@ -273,7 +282,7 @@ const InputBox = styled.div`
     }
 
     h3:first-child {
-        font-weight: bold;
+        font-weight: bold
     }
 
     input{

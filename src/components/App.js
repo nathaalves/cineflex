@@ -22,7 +22,7 @@ export default function App () {
                     <Route path="/" element={<MovieSelection />} />
                     <Route path="/sessoes/:movieId" element={<SectionSelection />} />
                     <Route 
-                        path="/sessoes/:movieId/assentos/:sectionId" 
+                        path="/assentos/:sectionId" 
                         element={ 
                             <SeatSelection
                                 information={information}
