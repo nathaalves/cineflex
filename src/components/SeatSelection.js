@@ -22,7 +22,7 @@ export default function SeatSelection ( {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sectionId}/seats`);
         promisse.then( response => setInformation( {...response.data} ));
     }, [])
-    
+
     function selectSeat (seatId, seatName, isAvailable) {
 
         if (isAvailable) {
@@ -100,9 +100,17 @@ export default function SeatSelection ( {
         return (
             <InputBox>
                 <h3>Nome do comprador:</h3>
-                <input placeholder='Digite seu nome...' onChange={ (e) => inputText(e, seatId, "name") } value={buyers[buyers.findIndex( buyer => buyer.idAssento === seatId)].nome}></input>
+                <input 
+                    placeholder='Digite seu nome...' 
+                    onChange={ (e) => inputText(e, seatId, "name") } 
+                    value={buyers[buyers.findIndex( buyer => buyer.idAssento === seatId)].nome}
+                ></input>
                 <h3>CPF do comprador:</h3>
-                <input placeholder='Digite seu CPF...' onChange={ (e) => inputText(e, seatId, "cpf") } value={buyers[buyers.findIndex( buyer => buyer.idAssento === seatId)].cpf}></input>
+                <input 
+                    placeholder='Digite seu CPF...' 
+                    onChange={ (e) => inputText(e, seatId, "cpf") } 
+                    value={buyers[buyers.findIndex( buyer => buyer.idAssento === seatId)].cpf}
+                ></input>
             </InputBox>
         )
     }
